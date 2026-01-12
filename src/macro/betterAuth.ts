@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth";
 import Elysia from "elysia";
 
 export const betterAuth = new Elysia({ name: "better-auth" })
+  .decorate("user", null as typeof auth.$Infer.Session.user | null)
+  .decorate("session", null as typeof auth.$Infer.Session.session | null)
   .mount(auth.handler)
   .macro({
     needsAuth: {

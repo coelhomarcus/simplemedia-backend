@@ -10,13 +10,13 @@ import { user } from "./auth";
 
 export const postTable = pgTable("post", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: uuid()
+  userId: uuid("user_id")
     .notNull()
     .references(() => user.id),
   title: varchar().notNull(),
   content: varchar().notNull(),
-  tags: varchar().array().notNull(),
-  imgs: varchar().array().notNull(),
+  tags: varchar().array().notNull().default([]),
+  imgs: varchar().array().notNull().default([]),
   updatedAt: timestamp("updated_at")
     .notNull()
     .defaultNow()
