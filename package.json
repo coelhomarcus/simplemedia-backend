@@ -7,7 +7,7 @@
     "dev": "bun run --watch src/index.ts",
     "dev:dcu": "docker compose up -d",
     "dev:dcd": "docker compose down",
-    "dev:db": "docker compose up -d && bun drizzle-kit push",
+    "dev:db": "docker compose up -d && bun drizzle-kit push && bun drizzle-kit studio",
     "dev:push": "bun drizzle-kit push",
     "dev:migrate": "bun drizzle-kit migrate",
     "dev:studio": "bun drizzle-kit studio"

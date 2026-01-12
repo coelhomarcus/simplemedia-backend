@@ -1,9 +1,10 @@
 import { Elysia } from "elysia";
 import z from "zod";
-import { createPost } from "@/service/post";
+import { createPost, deletePost } from "@/service/post";
 import { betterAuth } from "@/macro/betterAuth";
+import { string } from "zod/v4/core/regexes.cjs";
 
-export const testRoutes = new Elysia({ name: "test-routes" })
+export const communityRoutes = new Elysia({ name: "community-routes" })
   .use(betterAuth)
   .post(
     "/post",
@@ -37,15 +38,32 @@ export const testRoutes = new Elysia({ name: "test-routes" })
       },
     },
   )
+  .delete(
+    "/post/:id",
+    async ({ user, params }) => {
+      const postId = Number(params.id);
 
-  .get(
-    "/",
-    () => {
-      return "Hello API!";
+      if (!postId || isNaN(postId)) {
+        return {
+          message: "Invalid post ID",
+        };
+      }
+
+      const result = await deletePost(postId, user.id);
+
+      return {
+        message: "success",
+      };
     },
     {
+      needsAuth: true,
+      params: z.object({
+        id: z.string().describe("Post ID"),
+      }),
       response: {
-        200: z.string().describe("Hello Elysia"),
+        200: z.object({
+          message: z.string().describe("Message"),
+        }),
       },
     },
   );

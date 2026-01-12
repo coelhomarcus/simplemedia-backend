@@ -7,6 +7,7 @@ type CreatePostData = {
 
 import { db } from "@/database/db";
 import * as schema from "@/database/schema";
+import { eq } from "drizzle-orm";
 
 export const createPost = async (
   userId: string,
@@ -24,4 +25,26 @@ export const createPost = async (
     .returning();
 
   return newPost;
+};
+
+export const deletePost = async (id: number, userId: string) => {
+  const [post] = await db
+    .select()
+    .from(schema.postTable)
+    .where(eq(schema.postTable.id, id));
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  if (post.userId !== userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const result = await db
+    .delete(schema.postTable)
+    .where(eq(schema.postTable.id, id))
+    .returning();
+
+  return result;
 };
