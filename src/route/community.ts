@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import z from "zod";
-import { createPost, deletePost, updatePost } from "@/service/post";
+import { createPost, deletePost, updatePost } from "@/service/community";
 import { betterAuth } from "@/macro/betterAuth";
 
 export const communityRoutes = new Elysia({ name: "community-routes" })
