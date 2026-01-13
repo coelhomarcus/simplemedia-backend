@@ -34,6 +34,79 @@ export const createPost = async (
   return newPost;
 };
 
+export const getAllPosts = async () => {
+  const posts = await db
+    .select({
+      id: schema.postTable.id,
+      title: schema.postTable.title,
+      content: schema.postTable.content,
+      tags: schema.postTable.tags,
+      imgs: schema.postTable.imgs,
+
+      user: {
+        name: schema.user.username,
+        username: schema.user.username,
+        image: schema.user.image,
+      },
+    })
+    .from(schema.postTable)
+    .innerJoin(schema.user, eq(schema.postTable.userId, schema.user.id));
+
+  return posts;
+};
+
+export const getUserPosts = async (username: string) => {
+  const posts = await db
+    .select({
+      id: schema.postTable.id,
+      title: schema.postTable.title,
+      content: schema.postTable.content,
+      tags: schema.postTable.tags,
+      imgs: schema.postTable.imgs,
+
+      user: {
+        name: schema.user.username,
+        username: schema.user.username,
+        image: schema.user.image,
+      },
+    })
+    .from(schema.postTable)
+    .innerJoin(schema.user, eq(schema.postTable.userId, schema.user.id));
+
+  if (posts.length === 0) {
+    throw new Error("No posts found");
+  }
+
+  return posts;
+};
+
+export const getPostById = async (id: number) => {
+  const [post] = await db
+    .select({
+      id: schema.postTable.id,
+      userId: schema.postTable.userId,
+      title: schema.postTable.title,
+      content: schema.postTable.content,
+      tags: schema.postTable.tags,
+      imgs: schema.postTable.imgs,
+
+      user: {
+        name: schema.user.name,
+        username: schema.user.username,
+        image: schema.user.image,
+      },
+    })
+    .from(schema.postTable)
+    .where(eq(schema.postTable.id, id))
+    .innerJoin(schema.user, eq(schema.postTable.userId, schema.user.id));
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  return post;
+};
+
 export const deletePost = async (postId: number, userId: string) => {
   const [post] = await db
     .select()

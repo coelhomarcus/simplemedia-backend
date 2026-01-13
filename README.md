@@ -83,9 +83,9 @@ bun drizzle-kit studio
 
 ### Community (Posts)
 - [X] `createPost` – criar novo post
-- [ ] `getPost` – obter post por ID
-- [ ] `getUserPosts` – listar posts de um usuário
-- [ ] `getAllPosts` – listar todos os posts
+- [X] `getPost` – obter post por ID do Post
+- [X] `getUserPosts` – listar posts de um usuário pelo username
+- [X] `getAllPosts` – listar todos os posts
 - [X] `updatePost` – atualizar post existente
 - [X] `deletePost` – remover post
 
