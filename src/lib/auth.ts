@@ -17,6 +17,15 @@ export const auth = betterAuth({
       generateId: false,
     },
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: true,
+        defaultValue: "member",
+      },
+    },
+  },
   // session: {
   //   cookieCache: {
   //     enabled: true,

@@ -58,4 +58,36 @@ bun drizzle-kit studio
 ```
 
 ## Checklist ✅
+
+### Users
+- [X] `createUser` – criar um novo usuário
+- [X] `getUserById` – obter usuário por ID - (Admin)
+- [X] `getAllUsers` – listar todos os usuários - (Admin)
+- [X] `/me` - obter usuário logado - (Better-Auth) - `/auth/account-info`
+- [X] `updateUser` – atualizar dados do usuário - (Better-Auth)
+- [X] `deleteUser` – remover usuário - (Better-Auth)
+
+### Medias
+- [ ] `createMedia` – criar nova mídia
+- [ ] `getMedia` – obter mídia por ID
+- [ ] `getAllMedias` – listar todas as mídias
+- [ ] `updateMedia` – atualizar mídia existente
+- [ ] `deleteMedia` – remover mídia
+
+### Episodes
+- [ ] `createEpisode` – criar novo episódio
+- [ ] `getEpisode` – obter episódio por ID
+- [ ] `getAllEpisodes` – listar todos os episódios
+- [ ] `updateEpisode` – atualizar episódio existente
+- [ ] `deleteEpisode` – remover episódio
+
+### Community (Posts)
+- [X] `createPost` – criar novo post
+- [ ] `getPost` – obter post por ID
+- [ ] `getUserPosts` – listar posts de um usuário
+- [ ] `getAllPosts` – listar todos os posts
+- [X] `updatePost` – atualizar post existente
+- [X] `deletePost` – remover post
+
+### Progresso
 - ...

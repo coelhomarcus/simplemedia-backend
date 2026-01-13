@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 import { openapi } from "@elysiajs/openapi";
 import * as z from "zod";
 import { OpenAPI } from "@/lib/auth";
-import { communityRoutes } from "./route/community";
+import { userRoutes, communityRoutes } from "@/route";
 
 const app = new Elysia()
   .use(
@@ -16,7 +16,11 @@ const app = new Elysia()
       },
     }),
   )
+  .use(userRoutes)
   .use(communityRoutes)
   .listen(3000);
 
 console.log(`🦊 Elysia http://${app.server?.hostname}:${app.server?.port}`);
+console.log(
+  `👻 OpenAPI http://${app.server?.hostname}:${app.server?.port}/openapi`,
+);
