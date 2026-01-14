@@ -68,14 +68,14 @@ bun drizzle-kit studio
 - [X] `deleteUser` – remover usuário - (Better-Auth)
 
 ### Medias
-- [ ] `createMedia` – criar nova mídia
+- [X] `createMedia` – criar nova mídia
 - [ ] `getMedia` – obter mídia por ID
 - [ ] `getAllMedias` – listar todas as mídias
 - [ ] `updateMedia` – atualizar mídia existente
 - [ ] `deleteMedia` – remover mídia
 
 ### Episodes
-- [ ] `createEpisode` – criar novo episódio
+- [X] `createEpisode` – criar novo episódio
 - [ ] `getEpisode` – obter episódio por ID
 - [ ] `getAllEpisodes` – listar todos os episódios
 - [ ] `updateEpisode` – atualizar episódio existente
@@ -83,9 +83,9 @@ bun drizzle-kit studio
 
 ### Community (Posts)
 - [X] `createPost` – criar novo post
-- [ ] `getPost` – obter post por ID
-- [ ] `getUserPosts` – listar posts de um usuário
-- [ ] `getAllPosts` – listar todos os posts
+- [X] `getPost` – obter post por ID do Post
+- [X] `getUserPosts` – listar posts de um usuário pelo username
+- [X] `getAllPosts` – listar todos os posts
 - [X] `updatePost` – atualizar post existente
 - [X] `deletePost` – remover post
 

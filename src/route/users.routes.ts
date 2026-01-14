@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
-import z from "zod";
 import { getAllUsers, getUserById } from "@/service/users.services";
 import { betterAuth } from "@/macro/betterAuth";
+import { GetAllUsersSchema, GetUserByIdSchema } from "@/schema/users.schema";
 
 export const userRoutes = new Elysia({ name: "user-routes" })
   .use(betterAuth)
@@ -23,18 +23,7 @@ export const userRoutes = new Elysia({ name: "user-routes" })
     },
     {
       needsAuth: true,
-      response: z.array(
-        z.object({
-          id: z.string(),
-          createdAt: z.iso.datetime(),
-          updatedAt: z.iso.datetime(),
-          email: z.string(),
-          emailVerified: z.boolean(),
-          name: z.string(),
-          role: z.string(),
-          image: z.string().nullable().optional(),
-        }),
-      ),
+      response: GetAllUsersSchema.response,
     },
   )
   .get(
@@ -58,18 +47,7 @@ export const userRoutes = new Elysia({ name: "user-routes" })
     },
     {
       needsAuth: true,
-      params: z.object({
-        id: z.uuid(),
-      }),
-      response: z.object({
-        id: z.string(),
-        createdAt: z.iso.datetime(),
-        updatedAt: z.iso.datetime(),
-        email: z.string(),
-        emailVerified: z.boolean(),
-        name: z.string(),
-        role: z.string(),
-        image: z.string().nullable().optional(),
-      }),
+      params: GetUserByIdSchema.params,
+      response: GetUserByIdSchema.response,
     },
   );

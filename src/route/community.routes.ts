@@ -1,11 +1,21 @@
 import { Elysia } from "elysia";
-import z from "zod";
 import {
   createPost,
   deletePost,
   updatePost,
+  getUserPosts,
+  getPostById,
+  getAllPosts,
 } from "@/service/community.services";
 import { betterAuth } from "@/macro/betterAuth";
+import {
+  CreatePostSchema,
+  DeletePostSchema,
+  GetAllPostSchema,
+  GetPostByIdSchema,
+  GetPostsByUserSchema,
+  UpdatePostSchema,
+} from "@/schema/community.schema";
 
 export const communityRoutes = new Elysia({ name: "community-routes" })
   .use(betterAuth)
@@ -21,30 +31,72 @@ export const communityRoutes = new Elysia({ name: "community-routes" })
     },
     {
       needsAuth: true,
-      body: z.object({
-        title: z.string().min(2).max(100).describe("Title"),
-        content: z.string().min(2).max(1000).describe("Content"),
-        tags: z.string().array().optional().describe("Tags (Array)"),
-        imgs: z.string().array().optional().describe("imgs (Array)"),
-      }),
+      body: CreatePostSchema.body,
       response: {
-        200: z.object({
-          message: z.string().describe("Message"),
-          data: z.object({
-            userId: z.uuid().describe("User ID"),
-            title: z.string().min(2).max(100).describe("Title"),
-            content: z.string().min(2).max(1000).describe("Content"),
-            tags: z.string().array().optional().describe("Tags (Array)"),
-            imgs: z.string().array().optional().describe("imgs (Array)"),
-          }),
-        }),
+        200: CreatePostSchema.responseSuccess,
+      },
+    },
+  )
+  .get(
+    "posts",
+    async () => {
+      const posts = await getAllPosts();
+
+      return {
+        message: "success",
+        posts,
+      };
+    },
+    {
+      response: {
+        200: GetAllPostSchema.responseSuccess,
+      },
+    },
+  )
+  .get(
+    "post/:postId",
+    async ({ params }) => {
+      const id = parseInt(params.postId);
+
+      const post = await getPostById(id);
+
+      return {
+        message: "success",
+        post,
+      };
+    },
+    {
+      needsAuth: true,
+      params: GetPostByIdSchema.params,
+      response: {
+        200: GetPostByIdSchema.responseSuccess,
+      },
+    },
+  )
+  .get(
+    "posts/:username",
+    async ({ params }) => {
+      const username = params.username;
+
+      const posts = await getUserPosts(username);
+
+      return {
+        message: "success",
+        data: posts,
+      };
+    },
+    {
+      needsAuth: true,
+      params: GetPostsByUserSchema.params,
+      response: {
+        200: GetPostsByUserSchema.responseSuccess,
       },
     },
   )
   .delete(
-    "/post/:id",
+    "/post/delete/:postId",
     async ({ user, params }) => {
-      const postId = Number(params.id);
+      const postId = Number(params.postId);
 
       if (!postId || isNaN(postId)) {
         return {
@@ -60,20 +112,16 @@ export const communityRoutes = new Elysia({ name: "community-routes" })
     },
     {
       needsAuth: true,
-      params: z.object({
-        id: z.string().describe("Post ID"),
-      }),
+      params: DeletePostSchema.params,
       response: {
-        200: z.object({
-          message: z.string().describe("Message"),
-        }),
+        200: DeletePostSchema.responseSuccess,
       },
     },
   )
-  .put(
-    "/post/:id",
+  .post(
+    "/post/update/:postId",
     async ({ user, params, body, set }) => {
-      const postId = Number(params.id);
+      const postId = Number(params.postId);
 
       if (!postId || isNaN(postId)) {
         set.status = 400;
@@ -96,28 +144,11 @@ export const communityRoutes = new Elysia({ name: "community-routes" })
     },
     {
       needsAuth: true,
-      params: z.object({
-        id: z.string().describe("Post ID"),
-      }),
-      body: z.object({
-        title: z.string().min(2).max(100).describe("Title").optional(),
-        content: z.string().min(2).max(1000).describe("Content").optional(),
-        tags: z.string().array().optional().describe("Tags (Array)"),
-        imgs: z.string().array().optional().describe("imgs (Array)"),
-      }),
+      params: UpdatePostSchema.params,
+      body: UpdatePostSchema.body,
       response: {
-        200: z.object({
-          message: z.string().describe("Message"),
-          data: z.object({
-            title: z.string().describe("Title"),
-            content: z.string().describe("Content"),
-            tags: z.string().array().describe("Tags (Array)"),
-            imgs: z.string().array().describe("imgs (Array)"),
-          }),
-        }),
-        400: z.object({
-          message: z.string().describe("Message"),
-        }),
+        200: UpdatePostSchema.responseSuccess,
+        400: UpdatePostSchema.responseError,
       },
     },
   );

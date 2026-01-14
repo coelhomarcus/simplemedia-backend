@@ -14,10 +14,10 @@ export const media = pgTable("media", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: varchar().notNull(),
   sinopse: varchar().notNull(),
-  tags: varchar().array().notNull(),
-  coverUrl: varchar().notNull(),
-  bannerUrl: varchar().notNull(),
-  isMovie: boolean().notNull(),
+  tags: varchar().array(),
+  coverUrl: varchar("cover_url"),
+  bannerUrl: varchar("banner_url"),
+  isMovie: boolean("is_movie").notNull().default(false),
   updatedAt: timestamp("updated_at")
     .notNull()
     .defaultNow()
@@ -27,14 +27,14 @@ export const media = pgTable("media", {
 
 export const episode = pgTable("episode", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  mediaId: integer()
+  mediaId: integer("media_id")
     .notNull()
     .references(() => media.id),
   name: varchar().notNull(),
-  episodeNumber: varchar().notNull(),
-  thumbnailUrl: varchar().notNull(),
-  streamUrl: varchar().notNull(),
-  subtitleUrl: varchar().notNull(),
+  episodeNumber: integer("episode_number").notNull(),
+  thumbnailUrl: varchar("thumbnail_url"),
+  streamUrl: varchar("stream_url").notNull(),
+  subtitleUrl: varchar("subtitle_url"),
   updatedAt: timestamp("updated_at")
     .notNull()
     .defaultNow()
@@ -44,13 +44,13 @@ export const episode = pgTable("episode", {
 
 export const watchProgress = pgTable("watch_progress", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: uuid()
+  userId: uuid("user_id")
     .notNull()
     .references(() => user.id),
-  mediaId: integer()
+  mediaId: integer("media_id")
     .notNull()
     .references(() => media.id),
-  episodeId: integer()
+  episodeId: integer("episode_id")
     .notNull()
     .references(() => episode.id),
   timestamp: timestamp().notNull(),
@@ -64,16 +64,16 @@ export const watchProgress = pgTable("watch_progress", {
 
 export const watchedEpisode = pgTable("watched_episode", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: uuid()
+  userId: uuid("user_id")
     .notNull()
     .references(() => user.id),
-  mediaId: integer()
+  mediaId: integer("media_id")
     .notNull()
     .references(() => media.id),
-  episodeId: integer()
+  episodeId: integer("episode_id")
     .notNull()
     .references(() => episode.id),
-  watchedDate: date().notNull(),
+  watchedDate: date("watched_date").notNull(),
   updatedAt: timestamp("updated_at")
     .notNull()
     .defaultNow()

@@ -1,4 +1,5 @@
 import { communityRoutes } from "./community.routes";
-import { userRoutes } from "./user.routes";
+import { userRoutes } from "./users.routes";
+import { mediaRoutes } from "./media.routes";
 
-export { communityRoutes, userRoutes };
+export { communityRoutes, userRoutes, mediaRoutes };
