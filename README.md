@@ -69,10 +69,10 @@ bun drizzle-kit studio
 
 ### Medias
 - [X] `createMedia` – criar nova mídia
-- [ ] `getMedia` – obter mídia por ID
-- [ ] `getAllMedias` – listar todas as mídias
+- [X] `getMedia` – obter mídia por ID - com episodios
+- [X] `getAllMedias` – listar todas as mídias - com contagem de episodios
 - [ ] `updateMedia` – atualizar mídia existente
-- [ ] `deleteMedia` – remover mídia
+- [X] `deleteMedia` – remover mídia
 
 ### Episodes
 - [X] `createEpisode` – criar novo episódio

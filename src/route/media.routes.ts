@@ -1,13 +1,65 @@
 import { Elysia } from "elysia";
 import { betterAuth } from "@/macro/betterAuth";
-import { createMedia, createMediaEpisode } from "@/service/medias.services";
+import {
+  createMedia,
+  createMediaEpisode,
+  getMediaById,
+  getAllMedias,
+  deleteMediaById,
+} from "@/service/medias.services";
 import {
   CreateMediaSchema,
   CreateMediaEpisodeSchema,
+  GetMediaByIdSchema,
+  GetAllMediaSchema,
+  DeleteMediaByIdSchema,
 } from "@/schema/media.schema";
+import z from "zod";
 
 export const mediaRoutes = new Elysia({ name: "media-routes" })
   .use(betterAuth)
+  .get(
+    "/medias",
+    async ({ set }) => {
+      const medias = await getAllMedias();
+
+      if (!medias) {
+        set.status = 404;
+        throw new Error("Medias not found");
+      }
+
+      return medias;
+    },
+    {
+      needsAuth: true,
+      response: GetAllMediaSchema.responseSuccess,
+    },
+  )
+  .get(
+    "/media/:mediaId",
+    async ({ params, set }) => {
+      const id = Number(params.mediaId);
+
+      if (isNaN(id)) {
+        set.status = 400;
+        throw new Error("Invalid media id");
+      }
+
+      const media = await getMediaById(id);
+
+      if (!media) {
+        set.status = 404;
+        throw new Error("Media not found");
+      }
+
+      return media;
+    },
+    {
+      needsAuth: true,
+      params: GetMediaByIdSchema.params,
+      response: GetMediaByIdSchema.responseSuccess,
+    },
+  )
   .post(
     "media/create",
     async ({ body, user, set }) => {
@@ -102,5 +154,36 @@ export const mediaRoutes = new Elysia({ name: "media-routes" })
         200: CreateMediaEpisodeSchema.responseSuccess,
         500: CreateMediaEpisodeSchema.responseError,
       },
+    },
+  )
+  .delete(
+    "/media/delete/:mediaId",
+    async ({ params, set, user }) => {
+      if (user.role !== "admin") {
+        set.status = 403;
+        throw new Error("Unauthorized");
+      }
+
+      const id = Number(params.mediaId);
+
+      if (isNaN(id)) {
+        set.status = 400;
+        throw new Error("Invalid media id");
+      }
+
+      const response = await deleteMediaById(id);
+
+      if (!response) {
+        throw new Error("Failed to delete media");
+      }
+
+      return {
+        message: response,
+      };
+    },
+    {
+      needsAuth: true,
+      params: DeleteMediaByIdSchema.params,
+      response: DeleteMediaByIdSchema.responseSuccess,
     },
   );

@@ -29,7 +29,9 @@ export const episode = pgTable("episode", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   mediaId: integer("media_id")
     .notNull()
-    .references(() => media.id),
+    .references(() => media.id, {
+      onDelete: "cascade",
+    }),
   name: varchar().notNull(),
   episodeNumber: integer("episode_number").notNull(),
   thumbnailUrl: varchar("thumbnail_url"),
