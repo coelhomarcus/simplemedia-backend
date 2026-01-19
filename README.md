@@ -1,4 +1,4 @@
-# LuneBox | Back-end
+# Simple Media | Back-end
 
 Backend de uma plataforma simples de vídeos.
 A proposta inicial do projeto é **armazenar apenas referências (URLs)** de mídia no backend e distribuí-las de acordo com o conteúdo.
